@@ -1,5 +1,5 @@
 import {
-  afterEach, beforeEach, describe, expect, it,
+  afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
 import request from 'supertest';
 import app from '../../app.js';
@@ -61,11 +61,19 @@ describe('GET em /editoras/id', () => {
 });
 
 describe('PUT em /editoras/id', () => {
-  it('Deve alterar campo nome', async () => {
-    await request(app)
+  it.each([
+    ['nome', { nome: 'Casa do código' }],
+    ['cidade', { cidade: 'SP' }],
+    ['email', { email: 'cdc@cdc.com' }],
+  ])('Deve alterar campo %s', async (chave, params) => {
+    const requisicao = { request };
+    const spy = jest.spyOn(requisicao, 'request');
+    await requisicao.request(app)
       .put(`/editoras/${idResposta}`)
-      .send({ nome: 'Casa do código' })
+      .send(params)
       .expect(204);
+
+    expect(spy).toHaveBeenCalled();
   });
 });
 
