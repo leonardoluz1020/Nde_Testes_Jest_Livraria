@@ -1,4 +1,6 @@
-import { describe, expect, jest } from '@jest/globals';
+import {
+  describe, expect, jest, it,
+} from '@jest/globals';
 import Editora from '../../models/editora.js';
 
 describe('Testando o modelo editora', () => {
