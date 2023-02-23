@@ -20,8 +20,16 @@ describe('Testando o modelo editora', () => {
     expect(resposta.nome).toBe('CDC');
     editoraID = resposta.id;
   });
+  it('Deve achar editora por id', async () => {
+    const editoraPorId = await Editora.pegarPeloId(editoraID);
+    expect(editoraPorId).toEqual(expect.objectContaining({
+      id: expect.any(Number),
+      ...objetoEditora,
+      created_at: expect.any(String),
+      updated_at: expect.any(String),
+    }));
+  });
   it('Deve atualizar a editora por id', async () => {
-    console.log(editoraID);
     const body = { nome: 'Casa do Codigo', cidade: 'Belo horizonte' };
     const editoraExistente = await Editora.pegarPeloId(editoraID);
     const editoraUpdate = new Editora({ ...editoraExistente, ...body });
@@ -31,9 +39,8 @@ describe('Testando o modelo editora', () => {
   });
   it('Deve excluir a editora por id', async () => {
     const resposta = await Editora.excluir(editoraID);
-    expect(resposta).toBeUndefined()
+    expect(resposta).toBeUndefined();
   });
-
   it('Deve fazer uma chamada simulada ao BD', () => {
     const editora = new Editora(objetoEditora);
 
