@@ -45,11 +45,44 @@ describe('Testando o modelo autor', () => {
     }));
     autorID = resultado.id;
   });
+  it('Deve mostrar o autor cadastrado', async () => {
+    const resposta = await Autor.pegarPeloId(autorID);
+    expect(resposta.nome).toEqual(objetoAutor.nome);
+  });
+  it('Deve atualizar autor existente', async () => {
+    const body = { nome: 'Paulo gonçalves', nacionalidade: 'Brasileiro' };
+    const autorExistente = await Autor.pegarPeloId(autorID);
+
+    const autorUpdate = new Autor({ ...autorExistente, ...body });
+
+    const resposta = await autorUpdate.salvar(autorUpdate);
+
+    expect(resposta[0].nome).toEqual(autorUpdate.nome);
+    expect(resposta[0].nacionalidade).toEqual(autorUpdate.nacionalidade);
+  });
   it('Deve excluir autor no BD', async () => {
     await Autor.excluir(autorID);
-    const resultado = await Autor.pegarPeloId(autorID)
+    const resultado = await Autor.pegarPeloId(autorID);
 
-    expect(resultado).toEqual(undefined)
+    expect(resultado).toEqual(undefined);
+  });
+  it('Deve fazer uma chamada simulada ao BD', () => {
+    const autorSimulado = new Autor(objetoAutor);
+    autorSimulado.salvar = jest.fn().mockReturnValue({
+      id: 4,
+      nome: 'Paulo de andrade',
+      nacionalidade: 'Portugues',
+      created_at: '2023-02-23T20:05:22.707Z',
+      updated_at: '2023-02-23T20:05:22.737Z',
+    });
 
+    const retorno = autorSimulado.salvar();
+
+    expect(retorno).toEqual(expect.objectContaining({
+      id: expect.any(Number),
+      ...objetoAutor,
+      created_at: expect.any(String),
+      updated_at: expect.any(String),
+    }));
   });
 });
