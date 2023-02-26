@@ -38,7 +38,7 @@ class AutoresController {
       const autorAtual = await Autor.pegarPeloId(params.id);
       const novoAutor = new Autor({ ...autorAtual, ...body });
       const resposta = await novoAutor.salvar(novoAutor);
-      return res.status(200).json({ message: 'autor atualizado', content: resposta });
+      return res.status(204).json({ message: 'autor atualizado', content: resposta });
     } catch (err) {
       return res.status(500).json(err.message);
     }
