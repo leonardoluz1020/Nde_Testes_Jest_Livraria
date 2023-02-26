@@ -14,18 +14,6 @@ afterEach(() => {
   server.close();
 });
 
-describe('GET em /editoras', () => {
-  it('Deve retornar uma lista de editoras', async () => {
-    const resposta = await request(app)
-      .get('/editoras')
-      .set('Accept', 'application/json')
-      .expect('content-type', /json/)
-      .expect(200);
-
-    expect(resposta.body[0].email).toEqual('e@e.com');
-  });
-});
-
 let idResposta;
 describe('POST em /editoras', () => {
   it('Deve adicionar uma nova editora', async () => {
@@ -48,7 +36,7 @@ describe('POST em /editoras', () => {
   });
 });
 
-describe('GET em /editoras/id', () => {
+describe('GET em /editoras', () => {
   it('Deve retornar uma editora por id', async () => {
     const resposta = await request(app)
       .get(`/editoras/${idResposta}`)
@@ -57,6 +45,15 @@ describe('GET em /editoras/id', () => {
       .expect(200);
 
     expect(resposta.body.email).toEqual('saopaulo@saopaulo.com');
+  });
+  it('Deve retornar uma lista de editoras', async () => {
+    const resposta = await request(app)
+      .get('/editoras')
+      .set('Accept', 'application/json')
+      .expect('content-type', /json/)
+      .expect(200);
+
+    expect(resposta.body[0].email).toEqual('e@e.com');
   });
 });
 

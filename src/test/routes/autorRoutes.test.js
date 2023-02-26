@@ -37,11 +37,11 @@ describe('GET em /autores', () => {
   });
   it('Dever acessar autor por id', async () => {
     const resposta = await request(app)
-    .get(`/autores/${respostaId}`)
-    .set('Accept', 'application/json')
-    .expect('content-type', /json/)
-    .expect(200)
-    expect(resposta.body.id).toBe(respostaId)
+      .get(`/autores/${respostaId}`)
+      .set('Accept', 'application/json')
+      .expect('content-type', /json/)
+      .expect(200);
+    expect(resposta.body.id).toBe(respostaId);
   });
 });
 describe('PUT em /autores/id', () => {
